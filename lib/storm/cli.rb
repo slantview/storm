@@ -110,6 +110,10 @@ module Storm
       if not valid_ua?
         print_help_and_exit(3, "Invalid User Agent: #{config[:ua]}")
       end
+
+      if not valid_uri?
+        print_help_and_exit(4, "Invalid URL: #{@uri.to_s}")
+      end
     end
 
     def no_command_given?
@@ -132,9 +136,25 @@ module Storm
       config[:ua] =~ /^(osxsafari|osxchrome|osxff|winie|winchrome|winff|iphone|ipad|androidwebkit|androidopera|blackberry)$/
     end
 
+    def valid_uri?
+      if not @uri.scheme or not @uri.path or not @uri.host
+        return false
+      end
+      true
+    end
+
     def do_parse
       begin
         self.parse_options
+
+        # Parse URI and then add in scheme and path if not given.
+        @uri = URI(ARGV[0])
+        if not @uri.scheme
+          @uri = URI('http://' + ARGV[0])
+          if @uri.path.empty?
+            @uri.path = "/"
+          end
+        end
       rescue OptionParser::InvalidOption => e
         puts "ERROR: OptionParser => #{e}\n"
       rescue OptionParser::MissingArgument => e
@@ -163,16 +183,15 @@ module Storm
 
     # Internal execute command
     def execute!
-      uri = URI(ARGV[0])
-      puts "TESTING #{uri.host}" if config[:verbosity] > 0
+      puts "TESTING #{@uri.host}" if config[:verbosity] > 0
 
       tests = Hash.new
 
-      dns = Storm::Test::DNS.new(uri.host)
+      dns = Storm::Test::DNS.new(@uri.host)
       dns.run(config)
       tests[:dns] = dns.report
 
-      http = Storm::Test::HTTP.new(uri, :get, nil, nil)
+      http = Storm::Test::HTTP.new(@uri, :get, nil, nil)
       http.run(config)
       tests[:http] = http.report
 
