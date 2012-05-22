@@ -1,0 +1,4 @@
+#!/usr/bin/env ruby
+
+require 'storm/cli'
+Storm::CLI.new.run
