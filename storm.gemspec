@@ -16,11 +16,12 @@ Gem::Specification.new do |s|
 
   s.add_development_dependency "rspec"
 
-  s.files        = Dir.glob("{bin,lib}/**/*") + %w(README.md)
+  s.files        = Dir.glob("{bin,lib,etc}/**/*") + %w(README.md)
   s.executables  = ['storm']
   s.require_path = 'lib'
 
   s.add_dependency('mixlib-config', '>= 1.0.0')
   s.add_dependency('mixlib-cli', '>= 1.0.0')
   s.add_dependency('mixlib-log', '>= 1.0.0')
+  s.add_dependency('har', '>= 0.0.8')
 end

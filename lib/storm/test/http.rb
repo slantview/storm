@@ -22,11 +22,11 @@ module Storm
   class Test
     class HTTP < Test
 
-      attr_reader :uri, :method, :headers, :params, :req, :res
+      attr_reader :uri, :method, :headers, :params, :req, :res, :config
 
-      def initialize(uri = URI.new, method = :get, headers = nil, params = nil)
-        @uri, @method, @headers, @params = uri, method, headers, params
-        @uri = URI(uri) if uri.is_a? String
+      def initialize(config = {}, method = :get, headers = nil, params = nil)
+        @config, @method, @headers, @params = config, method, headers, params
+        @uri = config[:uri]
         @result = Array.new
       end
 
@@ -48,9 +48,15 @@ module Storm
           end
           @res = result[:res]
           @timer = result[:timer]
+          total = 0
           @timer.each do |n,t|
+            total += t.to_ms
             @result << t
           end
+          total_timer = Storm::Timer.new
+          total_timer.t_name = "Total"
+          total_timer.result[:total] = total/1000.to_f
+          @result << total_timer
         rescue Exception => e
           puts "ERROR: #{e}"
         end

@@ -23,6 +23,7 @@ require 'storm/test'
 require 'storm/test/dns'
 require 'storm/test/http'
 require 'storm/test/page_speed'
+require 'storm/test/har'
 require 'json'
 
 module Storm
@@ -158,6 +159,7 @@ module Storm
               @uri.path = "/"
             end
           end
+          config[:uri] = @uri
         end
       rescue OptionParser::InvalidOption => e
         puts "ERROR: OptionParser => #{e}\n"
@@ -193,17 +195,21 @@ module Storm
 
       tests = Hash.new
 
-      dns = Storm::Test::DNS.new(@uri.host)
+      dns = Storm::Test::DNS.new(config)
       dns.run(config)
       tests[:dns] = dns.report
 
-      http = Storm::Test::HTTP.new(@uri, :get, nil, nil)
+      http = Storm::Test::HTTP.new(config, :get, nil, nil)
       http.run(config)
       tests[:http] = http.report
 
-      pagespeed = Storm::Test::PageSpeed.new(@uri)
+      pagespeed = Storm::Test::PageSpeed.new(config)
       pagespeed.run(config)
       tests[:pagespeed] = pagespeed.report
+
+      har = Storm::Test::HAR.new(config)
+      har.run
+      tests[:har] = har.report
 
       case config[:format]
       when :text

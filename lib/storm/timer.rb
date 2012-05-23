@@ -18,7 +18,7 @@
 
 module Storm
   class Timer
-    attr_reader :t_name, :result
+    attr_accessor :t_name, :result
 
     def initialize(t_name = :default)
       @t_name = t_name

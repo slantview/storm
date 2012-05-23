@@ -25,10 +25,10 @@ module Storm
 
       DNS_TEST_SERVER = "8.8.8.8" || ENV['DNS_TEST_SERVER']
 
-      attr_reader :host
+      attr_reader :host, :config
 
-      def initialize(*args)
-        @host = args[0]
+      def initialize(config={})
+        @host = config[:uri].host
         @timer = Storm::Timer.new(:Lookup)
         @result = Array.new
       end

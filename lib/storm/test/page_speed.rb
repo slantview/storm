@@ -22,10 +22,10 @@ module Storm
   class Test
     class PageSpeed < Test
 
-      attr_reader :uri, :pagespeed, :apikey
+      attr_reader :uri, :pagespeed, :apikey, :config
 
-      def initialize(uri = URI.new)
-        @uri = uri
+      def initialize(config)
+        @uri, @config = config[:uri], config
         @apikey = ENV['PAGESPEED_API_KEY'] || 'AIzaSyC6M3WtBHrB2B1PSpm0csE8Ca4N6itQXqo'
         @pagespeed = Storm::PageSpeed.new(@uri, @apikey)
       end
