@@ -16,10 +16,8 @@
 # limitations under the License.
 #
 
-require 'rubygems'
 require 'net/dns'
 require 'net/dns/resolver'
-require 'storm/test.rb'
 
 module Storm
   class Test
@@ -31,7 +29,7 @@ module Storm
 
       def initialize(*args)
         @host = args[0]
-        @timer = Storm::Timer.new(:lookup)
+        @timer = Storm::Timer.new(:Lookup)
         @result = Array.new
       end
 

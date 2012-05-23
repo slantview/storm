@@ -19,8 +19,10 @@
 require 'storm'
 require 'uri'
 require 'mixlib/cli'
+require 'storm/test'
 require 'storm/test/dns'
 require 'storm/test/http'
+require 'storm/test/page_speed'
 require 'json'
 
 module Storm
@@ -78,7 +80,7 @@ module Storm
 
     option :close,
       :short => "-c",
-      :long => "--close",
+      :long => "--no-close",
       :description => "Add Connection: close HTTP header.",
       :boolean => false
 
@@ -194,6 +196,10 @@ module Storm
       http = Storm::Test::HTTP.new(@uri, :get, nil, nil)
       http.run(config)
       tests[:http] = http.report
+
+      pagespeed = Storm::Test::PageSpeed.new(@uri)
+      pagespeed.run(config)
+      tests[:pagespeed] = pagespeed.report
 
       case config[:format]
       when :text

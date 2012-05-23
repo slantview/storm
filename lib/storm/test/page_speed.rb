@@ -16,24 +16,27 @@
 # limitations under the License.
 #
 
+require 'storm/pagespeed'
+
 module Storm
   class Test
-    attr_reader :result
+    class PageSpeed < Test
 
-    def initialize
-      @result = Array.new
-    end
+      attr_reader :uri, :pagespeed, :apikey
 
-    def result
-      @result ||= Array.new
-    end
-
-    def report
-      report_data = Hash.new
-      @result.each do |timer|
-        report_data[timer.t_name] = timer.report(:ms)
+      def initialize(uri = URI.new)
+        @uri = uri
+        @apikey = ENV['PAGESPEED_API_KEY'] || 'AIzaSyC6M3WtBHrB2B1PSpm0csE8Ca4N6itQXqo'
+        @pagespeed = Storm::PageSpeed.new(@uri, @apikey)
       end
-      report_data
+
+      def run(config={})
+        @pagespeed.run
+      end
+
+      def report
+        @pagespeed.result
+      end
     end
   end
 end

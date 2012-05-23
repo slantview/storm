@@ -28,7 +28,7 @@ module Storm
 
     def initialize(address, port = nil)
       @timer = Hash.new
-      %w{ connect send wait read close }.each do |state|
+      %w{ Connect Send Wait Read Close }.each do |state|
         @timer[state.to_sym] = Storm::Timer.new(state.to_sym)
       end
       super(address, port)
@@ -41,29 +41,29 @@ module Storm
     def transport_request(req)
       count = 0
       begin
-        @timer[:connect].start
+        @timer[:Connect].start
         begin_transport req
-        @timer[:connect].stop
+        @timer[:Connect].stop
         res = catch(:response) {
           # Test the sending of the HTTP Request
-          @timer[:send].start
+          @timer[:Send].start
           req.exec @socket, @curr_http_version, edit_path(req.path)
-          @timer[:send].stop
+          @timer[:Send].stop
 
           # Test the time to wait until @socket is ready to recieve
-          @timer[:wait].start
+          @timer[:Wait].start
           ready = IO.select([@socket.io])
-          @timer[:wait].stop
+          @timer[:Wait].stop
 
           # Test receiving the data
           begin
-            @timer[:read].start
+            @timer[:Read].start
             res = Net::HTTPResponse.read_new(@socket)
           end while res.kind_of?(Net::HTTPContinue)
           res.reading_body(@socket, req.response_body_permitted?) {
             yield res if block_given?
           }
-          @timer[:read].stop
+          @timer[:Read].stop
           res
         }
 
@@ -82,9 +82,9 @@ module Storm
         @socket.close if @socket and not @socket.closed?
         raise
       end
-      @timer[:close].start
+      @timer[:Close].start
       end_transport req, res
-      @timer[:close].stop
+      @timer[:Close].stop
       { :res => res, :timer => @timer }
     rescue => exception
       D "Conn close because of error #{exception}"

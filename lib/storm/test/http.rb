@@ -16,8 +16,6 @@
 # limitations under the License.
 #
 
-require 'rubygems'
-require 'storm/test.rb'
 require 'storm/http_request'
 
 module Storm
