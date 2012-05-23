@@ -150,11 +150,13 @@ module Storm
         self.parse_options
 
         # Parse URI and then add in scheme and path if not given.
-        @uri = URI(ARGV[0])
-        if not @uri.scheme
-          @uri = URI('http://' + ARGV[0])
-          if @uri.path.empty?
-            @uri.path = "/"
+        if not no_command_given?
+          @uri = URI(ARGV[0])
+          if not @uri.scheme
+            @uri = URI('http://' + ARGV[0])
+            if @uri.path.empty?
+              @uri.path = "/"
+            end
           end
         end
       rescue OptionParser::InvalidOption => e
@@ -177,9 +179,11 @@ module Storm
     # Execute the command
     def run
       Mixlib::Log::Formatter.show_time = false
+      Storm::Log.info "Storm::CLI#run - Starting."
       validate_and_parse_options
       quiet_traps
       execute!
+      Storm::Log.info "Storm::CLI#run - Complete."
       exit 0
     end
 
@@ -204,9 +208,11 @@ module Storm
       case config[:format]
       when :text
         tests.each do |test, t|
-          puts "#{test.upcase.to_s}:"
-          t.each do |n,time|
-            puts "\t#{n}: #{time}"
+          if not t.empty?
+            puts "#{test.upcase.to_s}:"
+            t.each do |n,time|
+              puts "\t#{n}: #{time}"
+            end
           end
         end
       when :json

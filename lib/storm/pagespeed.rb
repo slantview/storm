@@ -51,13 +51,13 @@ module Storm
       end
 
     rescue Exception => e
-      puts e.message
-      puts e.backtrace.join("\n")
-      puts "\033[31mUh oh, didn't work. Maybe the host is down or the url is wrong... or perhaps google is down :("
+      Storm::Log.error "#{e.message}"
+      Storm::Log.error e.backtrace.join("\n")
     end
 
     def status_error(response)
-      puts "#{response.code}"
+      error = JSON.parse(response.body)['error']
+      Storm::Log.error "#{error['code']} - #{error['message']}"
     end
 
     private

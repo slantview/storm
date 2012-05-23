@@ -39,7 +39,7 @@ module Storm
         ret = res.query(@host)
         @timer.stop
 
-        @result << @timer
+        @result << @timer unless ret.answer.empty?
       end
     end
   end
