@@ -20,8 +20,9 @@ Gem::Specification.new do |s|
   s.executables  = ['storm']
   s.require_path = 'lib'
 
-  s.add_dependency('mixlib-config', '>= 1.0.0')
-  s.add_dependency('mixlib-cli', '>= 1.0.0')
-  s.add_dependency('mixlib-log', '>= 1.0.0')
-  s.add_dependency('har', '>= 0.0.8')
+  s.add_dependency('mixlib-config', '~> 1.0.0')
+  s.add_dependency('mixlib-cli', '~> 1.0.0')
+  s.add_dependency('mixlib-log', '~> 1.0.0')
+  s.add_dependency('har', '~> 0.0.8')
+  s.add_dependency('net-dns', '~> 0.8.0')
 end
