@@ -181,11 +181,11 @@ module Storm
     # Execute the command
     def run
       Mixlib::Log::Formatter.show_time = false
-      Storm::Log.info "Storm::CLI#run - Starting."
+      Storm::Log.info "Storm::CLI#run - Starting." if config[:verbosity] > 0
       validate_and_parse_options
       quiet_traps
       execute!
-      Storm::Log.info "Storm::CLI#run - Complete."
+      Storm::Log.info "Storm::CLI#run - Complete." if config[:verbosity] > 0
       exit 0
     end
 
