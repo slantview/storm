@@ -12,7 +12,7 @@ Gem::Specification.new do |s|
   s.email       = ["steve@slantview.com"]
   s.homepage    = "http://github.com/slantview/storm"
   s.summary     = "Website speed testing utility."
-  s.description = "Storm is a CLI app to do load testing and other testing of HTTP sites."
+  s.description = "Storm is a CLI app to do HTTP testing of a website."
 
   s.add_development_dependency "rspec"
 
