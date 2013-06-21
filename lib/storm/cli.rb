@@ -209,7 +209,7 @@ module Storm
 
       har = Storm::Test::HAR.new(config)
       har.run
-      tests[:har] = har.report
+      tests[:waterfall] = har.report
 
       case config[:format]
       when :text
