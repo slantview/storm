@@ -17,8 +17,5 @@
 #
 
 module Storm
-  # We're doing this because we might write tests that deal
-  # with other versions of bundler and we are unsure how to
-  # handle this better. Borrowed from Bundler::Version.
-  VERSION = '0.1.2' unless defined?(::Storm::VERSION)
+  VERSION = IO.read(File.join(File.dirname(__FILE__), '..', '..', 'VERSION')).chomp rescue "0.0.1"
 end
